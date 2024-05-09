@@ -1,1 +1,1 @@
-# pfx_to_crt
+脚本用于证书pfx格式转换成crt及私钥
