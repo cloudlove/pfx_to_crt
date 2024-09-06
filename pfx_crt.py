@@ -4,7 +4,8 @@ import os
 
 def pfx_to_crt(pfx_path, pfx_password, crt_path, key_path):
     # 读取 PFX 文件
-    pfx_file = open(pfx_path, 'rb').read()
+    with open(pfx_path, 'rb') as f:
+        pfx_file = f.read()
     p12 = OpenSSL.crypto.load_pkcs12(pfx_file, pfx_password)
     
     # 提取证书和私钥
@@ -28,9 +29,9 @@ def pfx_to_crt(pfx_path, pfx_password, crt_path, key_path):
 if __name__ == '__main__':
   passwd ="Admin@2024" #证书密码
   for file in os.listdir("/tmp/test/20240502SSL"):
-       d1 = re.split("pfx", file)
-       path ="/tmp/test/20240502SSL/{}".format(file)
-       crt = "/tmp/test/{}{}".format(d1[0],"crt")
-       key ="/tmp/test/{}{}".format(d1[0],"key")
-       print(path,crt,key)
-       pfx_to_crt(path,passwd,crt,key)
+      if file.endswith(".pfx"):
+            path = os.path.join("/tmp/test/20240502SSL", file)
+            crt = os.path.join("/tmp/test", os.path.splitext(file)[0] + ".crt")
+            key = os.path.join("/tmp/test", os.path.splitext(file)[0] + ".key")
+            print(path, crt, key)
+            pfx_to_crt(path, passwd, crt, key)
